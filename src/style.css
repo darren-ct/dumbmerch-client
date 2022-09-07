@@ -1,0 +1,60 @@
+body {
+    background-color:#0B0B0B ;
+}
+
+.App{
+    height: 100%;
+}
+
+@font-face {
+    font-family: Avenir;
+    src: url("./typeface/AvenirLTStd-Book.otf");
+  }
+
+@font-face {
+    font-family: AvenirBold;
+    src: url("./typeface/AvenirLTStd-Black.otf");
+}
+
+*{
+    color: white;
+    font-family: Avenir;
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+
+section{
+    padding: 80px 40px;
+    position: relative;
+}
+
+
+
+/* Button */
+button{
+    border: none;
+    border-radius: 8px;
+    padding: 8px 24px;
+    cursor: pointer;
+    transition: 150ms ease;
+
+}
+
+button:hover{
+    transform: scale(1.1);
+}
+
+button:first-child{
+    margin-right: 8px;
+}
+
+.edit-btn{
+   background-color: #56C05A;
+}
+
+.delete-btn{
+    background-color:  #F74D4D;
+    ;
+}
