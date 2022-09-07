@@ -17,7 +17,7 @@ const ChatMsg = ({msg}) => {
   return (
     <StyledChatMsg isMe={isMe}>
        {!isMe &&
-        <img src={msg.profile_img.length === 26 ? unknown : msg.profile_img}/> }
+        <img src={!msg.profile_img? unknown : msg.profile_img}/> }
         <div style={{display:"flex",flexDirection:"column"}}>
              <div className="msg-body" >
                  <div className="triangle" ></div>

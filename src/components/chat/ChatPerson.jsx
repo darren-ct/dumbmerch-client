@@ -10,7 +10,7 @@ const ChatPerson = ({person,setActivePerson,setClickedPerson,clickedPerson}) => 
   return (
     <div onClick={()=>{setClickedPerson(person.user_id);setActivePerson(person.room_id)}}>
     <StyledChatPerson Clicked={Clicked}>
-        <img src={person.profile_img.length === 26 ? unknown : person.profile_img} />
+        <img src={!person.profile_img ? unknown : person.profile_img} />
         <div>
              <span>{person.username}</span>
              <p>{croppedMessage}</p>

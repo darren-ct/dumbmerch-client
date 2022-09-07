@@ -38,7 +38,7 @@ const UserCard = ({user,navigate,api,token}) => {
   return (
     <StyledUserCard>
         {
-            user.profile_img.length !==  26 ? <img src={user.profile_img} /> : <img src={unknown}/>
+            user.profile_img ? <img src={user.profile_img} /> : <img src={unknown}/>
         }
         
         <div className="user-info">
