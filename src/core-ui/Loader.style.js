@@ -26,6 +26,6 @@ span {
     font-size: 20px;
 }
 
-`;
+`
 
 export default StyledLoader;
