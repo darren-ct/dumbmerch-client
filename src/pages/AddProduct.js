@@ -151,6 +151,8 @@ useEffect(()=>{
       setSuccessMsg("Product added");
 
       } catch (err) {
+      console.log(err)
+      setIsLoading(false);
       const payload = err.response.data;
       const message = payload.message;
 

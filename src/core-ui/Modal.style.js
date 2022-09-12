@@ -35,10 +35,14 @@ const StyledModal = styled.div`
 
     .yes-btn{
       flex: 1;
+      padding: 8px;
+      font-size: 18px;
       background-color: #56C05A;
     }
 
     .no-btn{
+      padding: 8px;
+      font-size: 18px;
       flex : 1;
       margin-left:26px ;
       background-color:#F74D4D;
