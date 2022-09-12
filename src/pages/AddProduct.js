@@ -1,5 +1,4 @@
 import { useState,useContext, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 
 import { AppContext } from "../App";
 
@@ -10,17 +9,14 @@ import {api} from "../connection";
 import { pushError } from "../auth";
 
 import Loader from "../components/notify/Loader";
-import Alert from "../components/Alert";
 import Error from "../components/notify/Error";
 import Success from "../components/notify/Success";
 
 const AddProduct = () => {
   const {token} = useContext(AppContext);
-  const navigate = useNavigate();
   
 //  State
   const[originalImg,setOriginalImg] = useState(null);
-
   const[form,setForm] = useState(
     {
       image : {
@@ -176,6 +172,12 @@ useEffect(()=>{
       const categories = payload.data.categories;
 
       setCategories(categories);
+      setForm(prev => {
+        return {...prev, category : {
+          value : categories[0] ? categories[0] : "",
+          error : prev.category.errMsg
+        }}
+      })
 
     } catch (err) {
       const payload = err.response.data;

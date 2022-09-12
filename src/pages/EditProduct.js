@@ -224,6 +224,12 @@ useEffect(()=>{
     const categories = payload.data.categories;
 
     setCategories(categories);
+    setForm(prev => {
+      return {...prev, category : {
+        value : categories[0] ? categories[0] : "",
+        error : prev.category.errMsg
+      }}
+    })
 
   } catch (err) {
     const payload = err.response.data;
