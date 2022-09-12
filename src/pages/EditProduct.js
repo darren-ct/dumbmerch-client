@@ -248,7 +248,6 @@ useEffect(()=>{
 
   return (
     <StyledFormProduct>
-         {errMsg && <Alert message={errMsg}/>}
          <b>Edit Product</b>
       <label className="upload-img">
           <div>Upload Image</div>

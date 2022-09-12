@@ -8,6 +8,7 @@ import {api} from "../connection"
 import { pushError } from "../auth";
 import Loader from "../components/notify/Loader";
 import Success from "../components/notify/Success";
+import Error from "../components/notify/Error";
 
 const AddCategory = () => {
     const{token} = useContext(AppContext);
