@@ -3,13 +3,15 @@ import { useNavigate } from "react-router-dom";
 
 import { AppContext } from "../App";
 
-
 import StyledFormProduct from '../core-ui/page/FormProduct.style.js'
 import Input from "../components/Input";
 
 import {api} from "../connection";
 import { pushError } from "../auth";
+
+import Loader from "../components/notify/Loader";
 import Alert from "../components/Alert";
+import Success from "../components/notify/Success";
 
 const AddProduct = () => {
   const {token} = useContext(AppContext);
@@ -39,10 +41,11 @@ const AddProduct = () => {
         value : "" , errMsg : ""
       }
     }
-  )
+  );
 
   const[errMsg,setErrMsg] = useState("");
-
+  const[successMsg,setSuccessMsg] = useState("");
+  const[isLoading,setIsLoading] = useState(false);
   const[categories,setCategories] = useState([]);
 
 // UseEffect
@@ -60,7 +63,7 @@ useEffect(()=>{
      
 },[])
 
-// Functions
+  // Functions
   const onChange = (e) => {
      setForm(prev => {
       return {
@@ -139,13 +142,12 @@ useEffect(()=>{
 
 
     try {
+      setIsLoading(true);
       await api.post(`/product`, formData , {
         headers: {'Authorization':`Bearer ${token}`}
         });
-
-        
-        navigate("/product");
-
+      setIsLoading(false);
+      setSuccessMsg("Product added");
 
       } catch (err) {
       const payload = err.response.data;
@@ -156,14 +158,16 @@ useEffect(()=>{
       };
 
     
-}
+  }
 
   const getCategories = async() => {
     try {
 
+      setIsLoading(true);
       const res = await api.get("/categories", {
         headers: {'Authorization':`Bearer ${token}`}
         });
+      setIsLoading(false);
 
       // Extract data
       const payload = res.data;
@@ -182,7 +186,9 @@ useEffect(()=>{
     };
   }
 
-  
+  // 
+  if(isLoading) return <Loader msg={"Loading..."}/>
+  if(successMsg) return <Success setSuccessMsg={setSuccessMsg} successMsg={successMsg} to="product"/>
 
   return (
     <StyledFormProduct>

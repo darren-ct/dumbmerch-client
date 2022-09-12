@@ -3,6 +3,7 @@ import { useEffect,useState,useContext } from "react";
 
 import {AppContext} from "../App"
 import StyledDetail from "../core-ui/page/Detail.style";
+import Loader from "../components/notify/Loader";
 
 import {api} from "../connection"
 
@@ -22,8 +23,8 @@ const Detail = () => {
     qty:"",
     desc:"",
     price:""
-  })
-
+  });
+  const[isLoading, setIsLoading] = useState(false);
   const[quantity,setQuantity] = useState(1);
 
   // UseEffect
@@ -51,23 +52,20 @@ const Detail = () => {
   const getProduct = async() => {
 
     try {
-
+      
+      setIsLoading(true)
       const res = await api.get(`/product/${id}`, {
         headers: {'Authorization':`Bearer ${token}`}
         });
-
+      setIsLoading(false)
       
       // Extract data
       const payload = res.data;
        let product = payload.data.product;
       product = {...product,price : convertRupiah.convert(product.price)}
 
-
-   
-
       setProduct(product);
       
-
     } catch (err) {
       const payload = err.response.data;
       const message = payload.message;
@@ -159,6 +157,8 @@ const Detail = () => {
   }
   }
 
+  // 
+  if(isLoading) return <Loader msg="Loading..."/>
 
   return (
     <StyledDetail>

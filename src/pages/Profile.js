@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import StyledProfile from '../core-ui/page/Profile.style';
 import TransactionCard from "../components/TransactionCard";
+import Loader from '../components/notify/Loader';
 import { api } from '../connection';
 
 import unknown from "../assets/unknown.jpg";
@@ -39,9 +40,12 @@ useEffect(()=>{
 // Function
 const getProfile = async() => {
       try {
+
+          setIsLoading(true)
           const res = await api.get("/profile", {
                headers: {'Authorization':`Bearer ${token}`}
                });
+          setIsLoading(false)
 
           // Extract data
           const payload = res.data;
@@ -84,6 +88,8 @@ const getTransactions = async() => {
  };
 };
 
+// 
+if(isLoading) return <Loader msg="Loading..."/>
 
  
   return (

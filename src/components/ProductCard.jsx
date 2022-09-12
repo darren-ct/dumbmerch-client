@@ -4,7 +4,7 @@ import liked from "../assets/liked.png";
 import unliked from "../assets/unliked.png"
 import { api } from '../connection';
 
-const ProductCard = ({product,navigate,getProducts,token}) => {
+const ProductCard = ({product,navigate,getProducts,token,setIsLoading,setSuccessMsg}) => {
   const id = product.id;
 
   const setFavorite = async(e) => {
@@ -12,15 +12,21 @@ const ProductCard = ({product,navigate,getProducts,token}) => {
       
       try {
           if(product.isFavorite){
+             setIsLoading(true);
              await api.delete(`/favorite/${id}`,{
               headers: {'Authorization':`Bearer ${token}`}
-             })
+             });
+             setIsLoading(false);
+             setSuccessMsg("Favorite removed");
           } else {
+             setIsLoading(true)
              await api.post("/favorite", {
               id : id
              }, {
               headers: {'Authorization':`Bearer ${token}`}
-             })
+             });
+             setIsLoading(false);
+             setSuccessMsg("Added to favorite");
           };
 
           return getProducts()

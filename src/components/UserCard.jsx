@@ -5,7 +5,7 @@ import unknown from "../assets/unknown.jpg"
 const UserCard = ({user,navigate,api,token}) => {
 
   const userId = user.user_id;
-
+  console.log(user.profile_img)
 
   const chatUser = async() => {
 
@@ -22,7 +22,6 @@ const UserCard = ({user,navigate,api,token}) => {
       navigate(`/complain/${roomId}`);
 
       
-
    } catch(err) {
 
        const payload = err.response.data;

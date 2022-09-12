@@ -7,6 +7,8 @@ const ChatPerson = ({person,setActivePerson,setClickedPerson,clickedPerson}) => 
   const timeString = person.hour.toString() + ":" + person.minute.toString() + ", " + person.day + "-" + person.month + "-" + person.year;
   const croppedMessage = person.last_msg.slice(0,14) + "....";
 
+  console.log(person.profile_img)
+
   return (
     <div onClick={()=>{setClickedPerson(person.user_id);setActivePerson(person.room_id)}}>
     <StyledChatPerson Clicked={Clicked}>

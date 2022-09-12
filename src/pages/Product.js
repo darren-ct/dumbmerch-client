@@ -10,6 +10,8 @@ import {overlay} from "../constants/index";
 
 import {api} from "../connection";
 import convertRupiah from 'rupiah-format';
+import Loader from '../components/notify/Loader';
+import Success from '../components/notify/Success';
 
 const Product = () => {
     const navigate = useNavigate();
@@ -17,30 +19,29 @@ const Product = () => {
 
     const[products,setProducts] = useState([]);
     const[isLoading,setIsLoading] = useState(false);
-
+    const[successMsg,setSuccessMsg] = useState("");
 
     const[isModal,setIsModal] = useState(false);
     const[idToDelete, setIdToDelete] = useState("");
 
     
     // Use Effect
-
     useEffect(()=>{
         getRows()
-    },[])
-
+    },[]);
 
     // Function
     const deleteRow = async(id) => {
 
       try {
+        setIsLoading(true);
         await api.delete(`/product/${id}`, {
                        headers: {'Authorization':`Bearer ${token}`}
                        }); 
+        setIsLoading(false);
+        setSuccessMsg("Product deleted");
 
-         getRows();
-
-
+        getRows();
       } catch(err) {
         const payload = err.response.data;
         const message = payload.message;
@@ -85,10 +86,11 @@ const Product = () => {
 
       };
 
-    }
+    };
 
-
-   
+    // 
+    if(successMsg) return <Success setSuccessMsg={setSuccessMsg} successMsg={successMsg} />
+    if(isLoading) return <Loader msg="Loading..." />
 
   return (
     <>
@@ -122,12 +124,9 @@ const Product = () => {
                     })
                    }
              </tbody>
-
-             {isLoading && <div>Loading</div>}
                    
               </StyledTable>
               
-
         </section>
     </>
   )

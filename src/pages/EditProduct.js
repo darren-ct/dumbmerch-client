@@ -3,13 +3,14 @@ import { useNavigate,useParams } from "react-router-dom";
 
 import { AppContext } from "../App";
 
-
 import StyledFormProduct from '../core-ui/page/FormProduct.style.js'
 import Input from "../components/Input";
+import Loader from "../components/notify/Loader";
 
 import {api} from "../connection";
 import { pushError } from "../auth";
 import Alert from "../components/Alert";
+import Success from "../components/notify/Success";
 
 const EditProduct = () => {
   const {token} = useContext(AppContext);
@@ -44,9 +45,10 @@ const EditProduct = () => {
   const[errMsg,setErrMsg] = useState("");
 
   const[categories,setCategories] = useState([]);
+  const [successMsg, setSuccessMsg] = useState("");
+  const[isLoading,setIsLoading] = useState(false);
 
 // Use Effects
-
 useEffect(()=>{
   if(form.image.value && typeof form.image.value !== "string"){
   const image = URL.createObjectURL(form.image.value);
@@ -59,14 +61,11 @@ useEffect(()=>{
     getInputs();
  },[])
 
- useEffect(()=>{
-  
+ useEffect(()=>{  
   getCategories();
-  
 },[])
 
- 
-// Functions
+  // Functions
   const onChange = (e) => {
      setForm(prev => {
       return {
@@ -94,9 +93,12 @@ useEffect(()=>{
 
   const getInputs = async () => {
     try {
+
+      setIsLoading(true);
       const res = await api.get(`/product/${id}`, {
         headers: {'Authorization':`Bearer ${token}`}
         });
+      setIsLoading(false);
 
         // Extract data
       const payload = res.data;
@@ -143,8 +145,6 @@ useEffect(()=>{
 
   const onSubmit = async(e) => {
     e.preventDefault();
-
-    
 
     // Reset
     setErrMsg("")
@@ -195,13 +195,13 @@ useEffect(()=>{
 
 
     try {
+      setIsLoading(true);
       await api.put(`/product/${id}`, formData , {
         headers: {'Authorization':`Bearer ${token}`}
         });
+      setIsLoading(false);
 
-        
-        navigate("/product");
-
+      setSuccessMsg("Product has been edited");
 
       } catch (err) {
       const payload = err.response.data;
@@ -211,15 +211,15 @@ useEffect(()=>{
       };
 
     
-}
+  };
 
-const getCategories = async() => {
-  try {
-
+  const getCategories = async() => {
+   try {
+    setIsLoading(true);
     const res = await api.get("/categories", {
       headers: {'Authorization':`Bearer ${token}`}
       });
-
+    setIsLoading(false);
     // Extract data
     const payload = res.data;
     const categories = payload.data.categories;
@@ -235,9 +235,11 @@ const getCategories = async() => {
     
 
   };
-}
+  };
 
-  
+  // 
+  if(isLoading) return <Loader msg="Loading..."/>
+  if(successMsg) return <Success setSuccessMsg={setSuccessMsg} successMsg={successMsg} to="product"/>
 
   return (
     <StyledFormProduct>

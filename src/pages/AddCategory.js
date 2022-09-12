@@ -8,6 +8,8 @@ import {api} from "../connection"
 
 import { pushError } from "../auth";
 import Alert from "../components/Alert";
+import Loader from "../components/notify/Loader";
+import Success from "../components/notify/Success";
 
 const AddCategory = () => {
     const{token} = useContext(AppContext);
@@ -19,6 +21,8 @@ const AddCategory = () => {
           value : "" , errMsg: ""
         }
     });
+    const[isLoading,setIsLoading] = useState(false);
+    const[successMsg, setSuccessMsg] = useState("");
     const[errMsg,setErrMsg] = useState("")
 
     // Functions
@@ -35,18 +39,17 @@ const AddCategory = () => {
           pushError(setForm, "category", "")
         };
 
-
-       
         try {
-          const res = await api.post(`/category`, {
+            setIsLoading(true)
+
+            await api.post(`/category`, {
             "name" : form.category.value
-          }, {
+             }, {
             headers: {'Authorization':`Bearer ${token}`}
             });
-    
-            navigate("/category");
-    
-    
+
+            setIsLoading(false)
+            setSuccessMsg("Category added")
     
           } catch (err) {
     
@@ -55,13 +58,12 @@ const AddCategory = () => {
 
           setErrMsg(message)
     
-          
-          
-    
           };
-    
-           
-      };
+    };
+
+    // 
+    if(isLoading) return <Loader msg="Loading..."/>
+    if(successMsg) return <Success setSuccessMsg={setSuccessMsg} successMsg={successMsg} to="category"/>
 
   return (
     <StyledFormCategory>

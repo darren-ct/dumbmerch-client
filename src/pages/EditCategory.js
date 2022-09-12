@@ -9,6 +9,8 @@ import Input from "../components/Input";
 import {api} from "../connection"
 import { pushError } from "../auth";
 import Alert from "../components/Alert";
+import Loader from "../components/notify/Loader";
+import Success from "../components/notify/Success";
 
 
 const EditCategory = () => {
@@ -22,23 +24,23 @@ const EditCategory = () => {
       value : "" , errMsg: ""
     },
   });
-  const[errMsg,setErrMsg] = useState("")
+  const[isLoading,setIsLoading] = useState(false);
+  const[errMsg,setErrMsg] = useState("");
+  const[successMsg, setSuccessMsg] = useState("")
 
   // Use Effects
   useEffect(()=>{
-   
   getInputs();
-
   },[]);
-
-
 
   // Functions
   const getInputs = async () => {
     try {
+      setIsLoading(true);
       const res = await api.get(`/category/${id}`, {
         headers: {'Authorization':`Bearer ${token}`}
         });
+      setIsLoading(false);
 
         // Extract data
       const payload = res.data;
@@ -81,15 +83,14 @@ const EditCategory = () => {
     };
    
     try {
-      const res = await api.put(`/category/${id}`, {
+      setIsLoading(true)
+      await api.put(`/category/${id}`, {
         "name" : form.category.value
       }, {
         headers: {'Authorization':`Bearer ${token}`}
         });
-
-        navigate("/category");
-
-
+      setIsLoading(false)
+      setSuccessMsg("Category edited")
 
       } catch (err) {
 
@@ -97,12 +98,15 @@ const EditCategory = () => {
       const message = payload.message;
 
       setErrMsg(message)
-      
-
+    
       };
 
        
   };
+
+  // 
+  if(isLoading) return <Loader msg="Loading..."/>
+  if(successMsg) return <Success setSuccessMsg={setSuccessMsg} successMsg={successMsg} to={"category"}/>
 
   return (
     <StyledFormCategory>

@@ -1,13 +1,13 @@
 import { useState,useContext, useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
-import {useQuery} from "react-query";
 
 import {AppContext} from "../App";
 import {api} from "../connection";
 
 import { StyledTable } from '../core-ui/Table.style';
 import CategoryRow from '../components/CategoryRow';
-
+import Loader from '../components/notify/Loader';
+import Success from '../components/notify/Success';
 import Modal from "../components/Modal";
 import {overlay} from "../constants/index"
 
@@ -20,13 +20,13 @@ import {overlay} from "../constants/index"
 
   const[isModal,setIsModal] = useState(false);
   const[idToDelete, setIdToDelete] = useState("");
+  const[successMsg, setSuccessMsg] = useState("");
 
 
   // Use Effect
   useEffect(()=>{
     getRows()
   },[])
-
 
   // Function
   const getRows = async() => {
@@ -57,15 +57,17 @@ import {overlay} from "../constants/index"
 
      };
 
-
   const deleteRow = async(id) => {
 
     try {
+      setIsLoading(true);
       await api.delete(`/category/${id}`, {
                      headers: {'Authorization':`Bearer ${token}`}
                      }); 
+      setIsLoading(false);
+      setSuccessMsg("Category deleted")
 
-       getRows();
+      getRows();
 
 
     } catch(err) {
@@ -80,9 +82,9 @@ import {overlay} from "../constants/index"
 
   };
 
-
-
-
+  // 
+  if(isLoading) return <Loader msg="Loading..."/>
+  if(successMsg) return <Success setSuccessMsg={setSuccessMsg} successMsg={successMsg} />
 
   return (
      <>
@@ -95,7 +97,7 @@ import {overlay} from "../constants/index"
                      <button style={{backgroundColor:"#F74D4D",fontSize:"18px"}} onClick={()=>{navigate("/addcategory")}}>Add New</button>
               </div>
 
-              <StyledTable>
+            <StyledTable>
               <thead>
                    <tr>
                         <th>No</th>
@@ -105,8 +107,6 @@ import {overlay} from "../constants/index"
                    </tr>
               </thead>
 
-              {isLoading && <div>Loading</div>}
-
               <tbody>
                    { categories &&
                     categories.map((category,index) => {
@@ -114,8 +114,7 @@ import {overlay} from "../constants/index"
                     })
                    }
              </tbody>
-                   
-              </StyledTable>
+            </StyledTable>
               
 
         </section>

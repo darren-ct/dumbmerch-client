@@ -4,10 +4,12 @@ import {useNavigate} from "react-router-dom";
 import {AppContext} from "../App"
 import StyledHome from '../core-ui/page/Home.style';
 import ProductCard from '../components/ProductCard';
+import Loader from "../components/notify/Loader";
 
 
 import {api} from "../connection"
 import convertRupiah from 'rupiah-format';
+import Success from '../components/notify/Success';
 
 const Home = () => {
   let navigate = useNavigate();
@@ -15,6 +17,7 @@ const Home = () => {
   // States
   const[products,setProducts] = useState([]);
   const[isLoading,setIsLoading] = useState(false);
+  const[successMsg,setSuccessMsg] = useState("");
 
   const[search,setSearch] = useState("");
 
@@ -27,7 +30,6 @@ const Home = () => {
 },[search]);
 
   
-
   // Function
   const getProducts = async() => {
 
@@ -71,21 +73,20 @@ const Home = () => {
       setSearch(e.target.value);
    }
   
-   
+  // 
+  if(successMsg) return <Success setSuccessMsg={setSuccessMsg} successMsg={successMsg} />
+  if(isLoading) return <Loader msg="Loading..."/>
 
   return (
     <>
-
       <StyledHome>
              <div className='title'>Products</div>
              <form onSubmit={(e)=>{e.preventDefault()}}>
                   <input type="text" placeholder='Search your products' onChange={onSearch} value={search}></input>
              </form>
                 
-            {isLoading ? <div style={{marginBottom:"100vh"}}>Loading...</div> : products.length === 0 ? <div style={{marginBottom:"100vh"}}>No results found..</div> : ""}
-
              <div className='products'>
-                 {products.map(product => <ProductCard key={product.id} product={product} navigate={navigate} getProducts={getProducts} token={token}/>)}
+                 {products.map(product => <ProductCard key={product.id} product={product} navigate={navigate} getProducts={getProducts} token={token} setIsLoading={setIsLoading} setSuccessMsg={setSuccessMsg}/>)}
              </div>
       </StyledHome>
     </>

@@ -8,10 +8,7 @@ import Input from "../components/Input"
 import {api} from "../connection";
 import { AppContext } from "../App";
 import Alert from "../components/Alert";
-
-
-
-
+import Loader from "../components/notify/Loader";
 
 const SearchUser = () => {
     const { token } = useContext(AppContext);
@@ -24,16 +21,18 @@ const SearchUser = () => {
             errMessage: ""
         }
     });
-
     const[userList,setUserList] = useState([]);
+    const[isLoading,setIsLoading] = useState(false);
     const[errMsg,setErrMsg] = useState("")
 
     // Function
     const getUsers = async() => {
         try {
+           setIsLoading(true);
            const res = await api.get("/users",{
             headers: {'Authorization':`Bearer ${token}`}
            });
+           setIsLoading(false);
 
            const payload = res.data;
            const users = payload.data.users;
@@ -68,6 +67,9 @@ const SearchUser = () => {
     getUsers();
 
     };
+
+    // 
+    if(isLoading) return <Loader msg="Loading..." />
 
   return (
     <StyledSearchUser>

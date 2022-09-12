@@ -13,6 +13,7 @@ const ChatMsg = ({msg}) => {
 
   const timeString = msg.hour.toString() + ":" + msg.minute.toString() + "," + msg.day + "-" + msg.month + "-" + msg.year;
 
+  console.log(msg.profile_img)
   
   return (
     <StyledChatMsg isMe={isMe}>

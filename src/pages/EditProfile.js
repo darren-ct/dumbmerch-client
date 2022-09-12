@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 
 import { AppContext } from "../App";
 
-
 import StyledFormProfile from '../core-ui/page/FormProfile.style'
 import Input from "../components/Input";
 
@@ -12,6 +11,7 @@ import { pushError } from "../auth";
 
 import unknown from "../assets/unknown.jpg";
 import Alert from "../components/Alert";
+import Loader from "../components/notify/Loader";
 
 const EditProfile = () => {
   const {token} = useContext(AppContext);
@@ -42,6 +42,7 @@ const EditProfile = () => {
   )
   const[errMsg,setErrMsg]= useState("");
   const[originalImg,setOriginalImg] = useState(null);
+  const[isLoading, setIsLoading] = useState(false);
 
 // Use Effects
 useEffect(()=>{
@@ -57,7 +58,6 @@ useEffect(()=>{
  },[])
  
 // Functions
-
   const onSelect = (e) => {
     setForm(prev => {
       return {
@@ -67,13 +67,15 @@ useEffect(()=>{
           errMsg : "" }
       }
      })
-  }
+  };
 
   const getInputs = async () => {
     try {
+      setIsLoading(true);
       const res = await api.get(`/profile`, {
         headers: {'Authorization':`Bearer ${token}`}
         });
+      setIsLoading(false);
 
         // Extract data
       const payload = res.data;
@@ -195,9 +197,10 @@ useEffect(()=>{
       };
 
     
-}
+  };
 
-  
+// 
+if(isLoading) return <Loader msg="Loading..."/>
 
   return (
     <StyledFormProfile>

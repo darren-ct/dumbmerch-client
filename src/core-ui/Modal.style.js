@@ -34,10 +34,12 @@ const StyledModal = styled.div`
     
 
     .yes-btn{
+      flex: 1;
       background-color: #56C05A;
     }
 
     .no-btn{
+      flex : 1;
       margin-left:26px ;
       background-color:#F74D4D;
 
