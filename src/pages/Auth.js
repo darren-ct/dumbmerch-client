@@ -2,7 +2,8 @@ import { useState } from "react";
 
 import { pushError,emailChecker } from "../auth";
 import {api} from "../connection";
-import Alert from "../components/Alert";
+import Loader from "../components/notify/Loader";
+import Error from "../components/notify/Error";
 
 import logo from "../assets/dumbmerch-logo.svg";
 import Input from "../components/Input";
@@ -11,7 +12,8 @@ import StyledAuth from "../core-ui/page/Auth.style.js"
 
  const Auth = ({setUser}) => {
   const[auth,setAuth] = useState("register");
-  const[errMsg,setErrMsg] = useState("")
+  const[errMsg,setErrMsg] = useState("");
+  const[isLoading,setIsLoading] = useState(false)
 
 // STATE
   const[loginForm,setLoginForm]=useState({
@@ -61,10 +63,12 @@ import StyledAuth from "../core-ui/page/Auth.style.js"
 
     // Post
     try {
+      setIsLoading(true)
       let res = await api.post("/login", {
         email : loginForm.email.value,
         password : loginForm.password.value
       });
+      setIsLoading(false)
   
       const payload = res.data;
       const user = payload.data.user;
@@ -106,11 +110,14 @@ import StyledAuth from "../core-ui/page/Auth.style.js"
 
     // Post
     try {
+
+    setIsLoading(true)
     let res = await api.post("/register", {
       name : registerForm.name.value,
       email : registerForm.email.value,
       password : registerForm.password.value
     })
+    setIsLoading(false)
 
     const payload = res.data;
     const user = payload.data.user;
@@ -125,13 +132,15 @@ import StyledAuth from "../core-ui/page/Auth.style.js"
     }
 
   };
+
+  // 
+
+  if(errMsg) return <Error error={errMsg} />
+  if(isLoading) return <Loader msg="Loading..."/>
   
 
   return (
-    <>
-      
-      {errMsg && <Alert message={errMsg}/> }
-      
+    <>      
       <StyledAuth>
 
           <div className="auth-desc">

@@ -11,6 +11,7 @@ import { pushError } from "../auth";
 
 import Loader from "../components/notify/Loader";
 import Alert from "../components/Alert";
+import Error from "../components/notify/Error";
 import Success from "../components/notify/Success";
 
 const AddProduct = () => {
@@ -153,7 +154,6 @@ useEffect(()=>{
       const payload = err.response.data;
       const message = payload.message;
 
-      
       setErrMsg(message)
       };
 
@@ -187,12 +187,12 @@ useEffect(()=>{
   }
 
   // 
+  if(errMsg) return <Error error={errMsg} />
   if(isLoading) return <Loader msg={"Loading..."}/>
   if(successMsg) return <Success setSuccessMsg={setSuccessMsg} successMsg={successMsg} to="product"/>
 
   return (
     <StyledFormProduct>
-        {errMsg && <Alert message={errMsg}/>}
          <b>Add Product</b>
       <label className="upload-img">
           <div>Upload Image</div>

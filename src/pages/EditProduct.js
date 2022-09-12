@@ -1,5 +1,5 @@
 import { useState,useEffect,useContext } from "react";
-import { useNavigate,useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 import { AppContext } from "../App";
 
@@ -9,12 +9,11 @@ import Loader from "../components/notify/Loader";
 
 import {api} from "../connection";
 import { pushError } from "../auth";
-import Alert from "../components/Alert";
+import Error from "../components/notify/Error";
 import Success from "../components/notify/Success";
 
 const EditProduct = () => {
   const {token} = useContext(AppContext);
-  const navigate = useNavigate();
   const {id} = useParams();
 
 //  State
@@ -232,12 +231,12 @@ useEffect(()=>{
 
     // navigate to error page
     console.log(message)
-    
-
+  
   };
   };
 
   // 
+  if(errMsg) return <Error error={errMsg} />
   if(isLoading) return <Loader msg="Loading..."/>
   if(successMsg) return <Success setSuccessMsg={setSuccessMsg} successMsg={successMsg} to="product"/>
 
