@@ -13,6 +13,7 @@ height: 100%;
 background-color: rgba(0,0,0,.8);
 
 div{
+    background-color: #212121;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -22,6 +23,7 @@ div{
 }
 
 span {
+    color: white;
     font-size: 20px;
 }
 
