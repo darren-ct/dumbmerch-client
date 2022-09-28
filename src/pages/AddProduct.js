@@ -129,6 +129,8 @@ useEffect(()=>{
 
 // FormData
     const formData = new FormData();
+    
+    console.log(form.image.value);
 
     formData.append("image",form.image.value);
     formData.append("title",form.name.value);
