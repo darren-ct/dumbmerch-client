@@ -39,6 +39,8 @@ const AddProduct = () => {
       }
     }
   );
+  
+  console.log(form.image.value)
 
   const[errMsg,setErrMsg] = useState("");
   const[successMsg,setSuccessMsg] = useState("");
